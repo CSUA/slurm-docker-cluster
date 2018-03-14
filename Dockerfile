@@ -1,4 +1,4 @@
-FROM centos:7
+FROM ubuntu
 
 LABEL org.label-schema.vcs-url="https://github.com/giovtorres/slurm-docker-cluster" \
       org.label-schema.docker.cmd="docker-compose up -d" \
@@ -12,30 +12,39 @@ ARG SLURM_DOWNLOAD_URL=https://download.schedmd.com/slurm/slurm-"$SLURM_VERSION"
 
 ARG GOSU_VERSION=1.10
 
-RUN yum makecache fast \
-    && yum -y install epel-release \
-    && yum -y install \
+RUN apt-get update \
+    && apt-get -y install \
            wget \
            bzip2 \
            perl \
-           gcc \
-           gcc-c++\
-           vim-enhanced \
+           build-essential \
+           vim \
            git \
            make \
            munge \
-           munge-devel \
-           python-devel \
+	   libmunge2 \
+	   libmunge-dev \
+	   libmariadbd-dev \
+	   libmariadb-client-lgpl-dev \
+	   libpam-dev \
+	   libnuma-dev \
+	   libjson-c-dev \
+	   h5utils \
+	   openssl \
+           python-dev \
            python-pip \
-           python34 \
-           python34-devel \
-           python34-pip \
+           python3 \
+           python3-dev \
+           python3-pip \
            mariadb-server \
-           mariadb-devel \
            psmisc \
            bash-completion \
-    && yum clean all \
-    && rm -rf /var/cache/yum
+	   nscd \
+	   openssh-server \
+	   distcc \
+    && apt clean \
+    && rm -rf /var/cache/apt
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y -q install nslcd
 
 RUN pip install Cython nose \
     && pip3 install Cython nose
@@ -55,7 +64,7 @@ RUN groupadd -r slurm --gid=995 && useradd -r -g slurm --uid=995 slurm
 RUN set -x \
     && wget -O slurm.tar.bz2 "$SLURM_DOWNLOAD_URL" \
     && echo "$SLURM_DOWNLOAD_MD5" slurm.tar.bz2 | md5sum -c - \
-    && mkdir /usr/local/src/slurm \
+    && mkdir -p /usr/local/src/slurm \
     && tar jxf slurm.tar.bz2 -C /usr/local/src/slurm --strip-components=1 \
     && rm slurm.tar.bz2 \
     && cd /usr/local/src/slurm \
@@ -69,10 +78,11 @@ RUN set -x \
     && install -D -m644 contribs/slurm_completion_help/slurm_completion.sh /etc/profile.d/slurm_completion.sh \
     && cd \
     && rm -rf /usr/local/src/slurm \
-    && mkdir /etc/sysconfig/slurm \
+    && mkdir -p /etc/slurm \
         /var/spool/slurmd \
         /var/run/slurmd \
         /var/run/slurmdbd \
+	/var/run/sshd \
         /var/lib/slurmd \
         /var/log/slurm \
         /data \
@@ -86,10 +96,26 @@ RUN set -x \
         /var/lib/slurmd/qos_usage \
         /var/lib/slurmd/fed_mgr_state \
     && chown -R slurm:slurm /var/*/slurm* \
-    && /sbin/create-munge-key
+    && /usr/sbin/create-munge-key \
+    && mkdir -p /var/run/munge \
+    && chown munge: /var/run/munge
 
-COPY slurm.conf /etc/slurm/slurm.conf
-COPY slurmdbd.conf /etc/slurm/slurmdbd.conf
+# Install Nvidia CUDA
+RUN wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.1.85-1_amd64.deb \
+    && dpkg -i cuda-repo-ubuntu1604_9.1.85-1_amd64.deb \
+    && apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
+RUN apt-get -y update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install cuda \
+    && rm cuda-repo-ubuntu1604_9.1.85-1_amd64.deb
+# End Nvidia CUDA
+
+COPY slurm.conf		/etc/slurm/slurm.conf
+COPY slurmdbd.conf	/etc/slurm/slurmdbd.conf
+COPY nslcd.conf		/etc/nslcd.conf
+COPY nscd.conf		/etc/nscd.conf
+COPY nsswitch.conf	/etc/nsswitch.conf
+COPY sshd_config	/etc/ssh/sshd_config
+COPY pam.d		/etc/pam.d
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

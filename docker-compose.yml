@@ -14,7 +14,7 @@ services:
       - var_lib_mysql:/var/lib/mysql
 
   slurmdbd:
-    image: slurm-docker-cluster:17.02.9
+    image: slurm-docker-cluster-ubuntu
     command: ["slurmdbd"]
     container_name: slurmdbd
     hostname: slurmdbd
@@ -28,45 +28,146 @@ services:
       - mysql
 
   slurmctld:
-    image: slurm-docker-cluster:17.02.9
+    image: slurm-docker-cluster-ubuntu
     command: ["slurmctld"]
     container_name: slurmctld
     hostname: slurmctld
+    devices:
+      - /dev/nvidia0
     volumes:
       - etc_munge:/etc/munge
       - etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
+      - /home:/home
     expose:
       - "6817"
+    ports:
+      - "22:22/tcp"
     depends_on:
       - "slurmdbd"
 
   c1:
-    image: slurm-docker-cluster:17.02.9
+    image: slurm-docker-cluster-ubuntu
     command: ["slurmd"]
     hostname: c1
     container_name: c1
+    devices:
+      - /dev/nvidia1
     volumes:
       - etc_munge:/etc/munge
       - etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
+      - /home:/home
     expose:
       - "6818"
     depends_on:
       - "slurmctld"
 
   c2:
-    image: slurm-docker-cluster:17.02.9
+    image: slurm-docker-cluster-ubuntu
     command: ["slurmd"]
     hostname: c2
     container_name: c2
+    devices:
+      - /dev/nvidia2
     volumes:
       - etc_munge:/etc/munge
       - etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
+      - /home:/home
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+
+  c3:
+    image: slurm-docker-cluster-ubuntu
+    command: ["slurmd"]
+    hostname: c3
+    container_name: c3
+    devices:
+      - /dev/nvidia3
+    volumes:
+      - etc_munge:/etc/munge
+      - etc_slurm:/etc/slurm
+      - slurm_jobdir:/data
+      - var_log_slurm:/var/log/slurm
+      - /home:/home
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+
+  c4:
+    image: slurm-docker-cluster-ubuntu
+    command: ["slurmd"]
+    hostname: c4
+    container_name: c4
+    devices:
+      - /dev/nvidia4
+    volumes:
+      - etc_munge:/etc/munge
+      - etc_slurm:/etc/slurm
+      - slurm_jobdir:/data
+      - var_log_slurm:/var/log/slurm
+      - /home:/home
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+
+  c5:
+    image: slurm-docker-cluster-ubuntu
+    command: ["slurmd"]
+    hostname: c5
+    container_name: c5
+    devices:
+      - /dev/nvidia5
+    volumes:
+      - etc_munge:/etc/munge
+      - etc_slurm:/etc/slurm
+      - slurm_jobdir:/data
+      - var_log_slurm:/var/log/slurm
+      - /home:/home
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+
+  c6:
+    image: slurm-docker-cluster-ubuntu
+    command: ["slurmd"]
+    hostname: c6
+    container_name: c6
+    devices:
+      - /dev/nvidia6
+    volumes:
+      - etc_munge:/etc/munge
+      - etc_slurm:/etc/slurm
+      - slurm_jobdir:/data
+      - var_log_slurm:/var/log/slurm
+      - /home:/home
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+
+  c7:
+    image: slurm-docker-cluster-ubuntu
+    command: ["slurmd"]
+    hostname: c7
+    container_name: c7
+    devices:
+      - /dev/nvidia7
+    volumes:
+      - etc_munge:/etc/munge
+      - etc_slurm:/etc/slurm
+      - slurm_jobdir:/data
+      - var_log_slurm:/var/log/slurm
+      - /home:/home
     expose:
       - "6818"
     depends_on:

@@ -20,6 +20,12 @@ fi
 
 if [ "$1" = "slurmctld" ]
 then
+    echo "---> Starting nslcd ldap client daemon ..."
+    /usr/sbin/nslcd
+
+    echo "---> Starting the sshd daemon ..."
+    /usr/sbin/sshd -p22
+
     echo "---> Starting the MUNGE Authentication service (munged) ..."
     gosu munge /usr/sbin/munged
 
