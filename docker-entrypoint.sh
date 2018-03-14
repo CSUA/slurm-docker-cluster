@@ -3,6 +3,9 @@ set -e
 
 if [ "$1" = "slurmdbd" ]
 then
+    echo "---> Starting nslcd ldap client daemon ..."
+    /usr/sbin/nslcd
+
     echo "---> Starting the MUNGE Authentication service (munged) ..."
     gosu munge /usr/sbin/munged
 
@@ -44,6 +47,9 @@ fi
 
 if [ "$1" = "slurmd" ]
 then
+    echo "---> Starting nslcd ldap client daemon ..."
+    /usr/sbin/nslcd
+
     echo "---> Starting the MUNGE Authentication service (munged) ..."
     gosu munge /usr/sbin/munged
 

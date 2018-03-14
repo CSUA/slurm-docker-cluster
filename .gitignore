@@ -1,0 +1,6 @@
+# for security
+nslcd.conf
+pam.d/**
+
+nvidia-docker-compose.yml
+*.log
