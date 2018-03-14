@@ -1,4 +1,7 @@
 #!/bin/bash
+export PATH="/usr/local/nvidia/bin:$PATH"
+export PATH="/usr/local/cuda:$PATH"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64
 set -e
 
 if [ "$1" = "slurmdbd" ]
@@ -61,6 +64,9 @@ then
         sleep 2
     done
     echo "-- slurmctld is now active ..."
+
+    echo "---> Setting up Gres ..."
+    printf "NAME=gpu Type=P100 File=`find /dev/ -name "nvidia?"` CPUs=0-3\n" > /etc/slurm/gres.conf
 
     echo "---> Starting the Slurm Node Daemon (slurmd) ..."
     exec /usr/sbin/slurmd -Dvvv

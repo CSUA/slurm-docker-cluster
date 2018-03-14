@@ -46,6 +46,8 @@ RUN apt-get update \
     && rm -rf /var/cache/apt
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y -q install nslcd
 
+RUN pip3 install --upgrade pip
+RUN pip install --upgrade pip
 RUN pip install Cython nose \
     && pip3 install Cython nose
 
@@ -108,6 +110,16 @@ RUN apt-get -y update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install cuda \
     && rm cuda-repo-ubuntu1604_9.1.85-1_amd64.deb
 # End Nvidia CUDA
+
+# Install Pytorch + tensorflow
+RUN apt-get -y install cuda-command-line-tools-9.1 python3-dev python-dev python3-virtualenv python-virtualenv
+RUN pip3 install http://download.pytorch.org/whl/cu91/torch-0.3.1-cp35-cp35m-linux_x86_64.whl \
+    && pip3 install torchvision && pip install torchvision
+RUN pip3 install numpy \
+    && pip install numpy
+RUN pip3 install tensorflow tensorflow-gpu \
+    && pip install tensorflow tensorflow-gpu
+# End Pytorch + tensorflow
 
 COPY slurm.conf		/etc/slurm/slurm.conf
 COPY slurmdbd.conf	/etc/slurm/slurmdbd.conf
