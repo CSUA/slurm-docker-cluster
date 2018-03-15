@@ -128,7 +128,6 @@ COPY nscd.conf		/etc/nscd.conf
 COPY nsswitch.conf	/etc/nsswitch.conf
 COPY sshd_config	/etc/ssh/sshd_config
 COPY pam.d		/etc/pam.d
-COPY profile		/etc/proflle
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

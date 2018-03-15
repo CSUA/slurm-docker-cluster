@@ -1,6 +1,7 @@
-# for security
+docker-entrypoint.sh
+docker-compose.yml
+slurm.conf
+slurmdbd.conf
 nslcd.conf
-pam.d/**
-
 nvidia-docker-compose.yml
 *.log

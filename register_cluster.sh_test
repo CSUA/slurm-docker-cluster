@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+docker exec slurmctld_test bash -c "/usr/bin/sacctmgr --immediate add cluster name=linux_test" && \
+docker-compose restart slurmdbd_test slurmctld_test
