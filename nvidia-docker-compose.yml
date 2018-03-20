@@ -1,0 +1,271 @@
+services:
+  c1:
+    command:
+    - slurmd
+    container_name: c1
+    cpuset: 4,5,6,7
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia0
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c1
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  c2:
+    command:
+    - slurmd
+    container_name: c2
+    cpuset: 8,9,10,11
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia2
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c2
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  c3:
+    command:
+    - slurmd
+    container_name: c3
+    cpuset: 12,13,14,15
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia3
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c3
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  c4:
+    command:
+    - slurmd
+    container_name: c4
+    cpuset: 16,17,18,19
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia4
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c4
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  c5:
+    command:
+    - slurmd
+    container_name: c5
+    cpuset: 20,21,22,23
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia5
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c5
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  c6:
+    command:
+    - slurmd
+    container_name: c6
+    cpuset: 24,25,26,27
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia6
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c6
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  c7:
+    command:
+    - slurmd
+    container_name: c7
+    cpuset: 28,29,30,31
+    depends_on:
+    - slurmctld
+    devices:
+    - /dev/nvidia7
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6818'
+    hostname: c7
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  mysql:
+    container_name: mysql
+    devices:
+    - /dev/nvidia0
+    - /dev/nvidia1
+    - /dev/nvidia2
+    - /dev/nvidia3
+    - /dev/nvidia4
+    - /dev/nvidia5
+    - /dev/nvidia6
+    - /dev/nvidia7
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    environment:
+      MYSQL_DATABASE: slurm_acct_db
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: slurm
+    hostname: mysql
+    image: mysql:5.7
+    volumes:
+    - var_lib_mysql:/var/lib/mysql
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  slurmctld:
+    command:
+    - slurmctld
+    container_name: slurmctld
+    cpuset: 0,1,2,3
+    depends_on:
+    - slurmdbd
+    devices:
+    - /dev/nvidia1
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6817'
+    hostname: slurmctld
+    image: slurm-docker-cluster-ubuntu
+    mem_limit: 16g
+    mem_reservation: 512m
+    memswap_limit: 17g
+    ports:
+    - 22:22/tcp
+    volumes:
+    - etc_munge:/etc/munge
+    - slurm_jobdir:/data
+    - var_log_slurm:/var/log/slurm
+    - /home:/home
+    - /datasets:/datasets
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+  slurmdbd:
+    command:
+    - slurmdbd
+    container_name: slurmdbd
+    depends_on:
+    - mysql
+    devices:
+    - /dev/nvidia0
+    - /dev/nvidia1
+    - /dev/nvidia2
+    - /dev/nvidia3
+    - /dev/nvidia4
+    - /dev/nvidia5
+    - /dev/nvidia6
+    - /dev/nvidia7
+    - /dev/nvidiactl
+    - /dev/nvidia-uvm
+    - /dev/nvidia-uvm-tools
+    expose:
+    - '6819'
+    hostname: slurmdbd
+    image: slurm-docker-cluster-ubuntu
+    volumes:
+    - etc_munge:/etc/munge
+    - etc_slurm:/etc/slurm
+    - var_log_slurm:/var/log/slurm
+    - nvidia_driver_390.30:/usr/local/nvidia:ro
+version: '2.2'
+volumes:
+  etc_munge: null
+  etc_slurm: null
+  nvidia_driver_390.30:
+    external: true
+  slurm_jobdir: null
+  var_lib_mysql: null
+  var_log_slurm: null
