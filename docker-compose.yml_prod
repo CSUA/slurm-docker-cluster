@@ -6,10 +6,10 @@ services:
     hostname: mysql
     container_name: mysql
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-      MYSQL_DATABASE: slurm_acct_db
-      MYSQL_USER: slurm
-      MYSQL_PASSWORD: password
+      - MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      - MYSQL_DATABASE: slurm_acct_db
+      - MYSQL_USER: slurm
+      - MYSQL_PASSWORD
     volumes:
       - var_lib_mysql:/var/lib/mysql
 
@@ -31,7 +31,7 @@ services:
     image: slurm-docker-cluster-ubuntu
     command: ["slurmctld"]
     container_name: slurmctld
-    hostname: slurmctld
+    hostname: latte
     cpuset: "0,1,2,3"
     mem_limit: 16g
     memswap_limit: 17g

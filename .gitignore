@@ -5,3 +5,9 @@ slurmdbd.conf
 nslcd.conf
 nvidia-docker-compose.yml
 *.log
+mysql_password.txt
+.env
+docker-entrypoint.sh
+register_cluster.sh
+slurm.conf
+nvidia-docker-compose.yml

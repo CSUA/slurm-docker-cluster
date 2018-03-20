@@ -128,6 +128,7 @@ COPY nscd.conf		/etc/nscd.conf
 COPY nsswitch.conf	/etc/nsswitch.conf
 COPY sshd_config	/etc/ssh/sshd_config
 COPY pam.d		/etc/pam.d
+COPY mysql_password.txt /root/mysql_password.txt
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

@@ -40,4 +40,6 @@ clean:
 	docker-compose rm -sf
 	@docker volume rm slurmdockercluster_etc_munge slurmdockercluster_etc_slurm slurmdockercluster_slurm_jobdir slurmdockercluster_var_lib_mysql slurmdockercluster_var_log_slurm
 	@docker volume rm slurmdockercluster_etc_munge_test slurmdockercluster_etc_slurm_test slurmdockercluster_slurm_jobdir_test slurmdockercluster_var_lib_mysql_test slurmdockercluster_var_log_slurm_test
+	@docker volume rm nihti_etc_munge nihti_etc_slurm nihti_slurm_jobdir nihti_var_lib_mysql nihti_var_log_slurm
+	@docker volume rm nihti_etc_munge_test nihti_etc_slurm_test nihti_slurm_jobdir_test nihti_var_lib_mysql_test nihti_var_log_slurm_test
 	$(foreach FILE,$(SYMLINKS), $(shell unlink $(FILE)))

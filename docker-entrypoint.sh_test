@@ -1,8 +1,19 @@
 #!/bin/bash
+# ADD DOCUMENTATION HERE TODO
 export PATH="/usr/local/nvidia/bin:$PATH"
 export PATH="/usr/local/cuda:$PATH"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64
 set -e
+
+MYSQL_PASSWORD=`cat /root/mysql_password.txt`
+
+sed -e "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/" /etc/slurm/slurmdbd.conf > \
+/etc/slurm/slurmdbd_temp.conf
+
+mv /etc/slurm/slurmdbd_temp.conf /etc/slurm/slurmdbd.conf
+
+chown slurm: /etc/slurm/slurmdbd.conf
+chmod 600 /etc/slurm/slurmdbd.conf
 
 if [ "$1" = "slurmdbd" ]
 then
@@ -14,7 +25,9 @@ then
 
     echo "---> Starting the Slurm Database Daemon (slurmdbd) ..."
 
-    until echo "SELECT 1" | mysql -h mysql_test -uslurm -ppassword 2>&1 > /dev/null
+    echo What the fuck docker compose $MYSQL_PASSWORD !!!!
+
+    until echo "SELECT 1" | mysql -h mysql_test -uslurm -p$MYSQL_PASSWORD 2>&1 > /dev/null
     do
         echo "-- Waiting for database to become active ..."
         sleep 2
