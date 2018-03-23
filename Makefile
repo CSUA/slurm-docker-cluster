@@ -36,6 +36,12 @@ prod_symlinks:
 	@echo "Building...may Richard Stallman have mercy on your soul"
 	$(foreach FILE,$(SYMLINKS), $(shell ln -sf $(FILE)_prod $(FILE)))
 
+test_password:
+	pswd="$$(cat mysql_password.txt)" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml && rm -f test.txt && pswd=""
+
+prod_password:
+	pswd="$$(cat mysql_password.txt)" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_prod > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml_prod && rm -f test.txt && pswd=""
+
 clean:
 	docker-compose rm -sf
 	@docker volume rm slurmdockercluster_etc_munge slurmdockercluster_etc_slurm slurmdockercluster_slurm_jobdir slurmdockercluster_var_lib_mysql slurmdockercluster_var_log_slurm
