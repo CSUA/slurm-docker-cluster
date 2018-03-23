@@ -6,10 +6,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64
 export MYSQL_PASSWORD="$(cat /root/mysql_password.txt)"
 set -e
 
-sed -e "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/" /etc/slurm/slurmdbd.conf > \
+sed -e "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/g" /etc/slurm/slurmdbd.conf > \
 /etc/slurm/slurmdbd_temp.conf
 
-mv /etc/slurm/slurmdbd_temp.conf /etc/slurm/slurmdbd.conf
+mv -f /etc/slurm/slurmdbd_temp.conf /etc/slurm/slurmdbd.conf
 
 chown slurm: /etc/slurm/slurmdbd.conf
 chmod 600 /etc/slurm/slurmdbd.conf

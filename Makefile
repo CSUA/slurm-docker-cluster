@@ -71,5 +71,9 @@ init: .git/hooks/pre-commit
 	cp .pre-commit.sh .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
 
+.git/hooks/post-commit: .post-commit.sh
+	cp .post-commit.sh .git/hooks/post-commit
+	chmod +x .git/hooks/post-commit
+
 mysql_password.txt:
 	openssl rand -base64 32 > mysql_password.txt

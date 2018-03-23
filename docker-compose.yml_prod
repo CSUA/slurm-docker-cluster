@@ -1,4 +1,4 @@
-version: "2.2"  
+version: "2.2"
 
 services:
   mysql:
@@ -19,7 +19,7 @@ services:
     hostname: slurmdbd
     volumes:
       - etc_munge:/etc/munge
-      - etc_slurm:/etc/slurm
+      # - etc_slurm:/etc/slurm
       - var_log_slurm:/var/log/slurm
     expose:
       - "6819"
@@ -30,7 +30,7 @@ services:
     image: slurm-docker-cluster-ubuntu
     command: ["slurmctld"]
     container_name: slurmctld
-    hostname: latte
+    hostname: slurmctld
     cpuset: "0,1,2,3"
     mem_limit: 16g
     memswap_limit: 17g
