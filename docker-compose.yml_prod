@@ -7,7 +7,6 @@ services:
     container_name: mysql
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-      MYSQL_PASSWORD: billcaoisagoodpassword
       MYSQL_DATABASE: slurm_acct_db
       MYSQL_USER: slurm
     volumes:

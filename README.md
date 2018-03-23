@@ -1,10 +1,23 @@
-# Slurm Docker Cluster
+
+# User Guide
+
+TODO
+
+# Developer Guide
+
+TODO
+
+## Slurm Docker Cluster
 
 This is a multi-container Slurm cluster using docker-compose.  The compose file
 creates named volumes for persistent storage of MySQL data files as well as
 Slurm state and log directories.
 
-## Containers and Volumes
+### Makefile commands
+
+* TODO
+
+### Containers and Volumes
 
 The compose file will run the following containers:
 
@@ -22,7 +35,7 @@ The compose file will create the following named volumes:
 * var_lib_mysql     ( -> /var/lib/mysql )
 * var_log_slurm     ( -> /var/log/slurm )
 
-## Building the Docker Image
+### Building the Docker Image
 
 Build the image locally:
 
@@ -30,7 +43,7 @@ Build the image locally:
 $ docker build -t slurm-docker-cluster:17.02.9 .
 ```
 
-## Starting the Cluster
+### Starting the Cluster
 
 Run `docker-compose` to instantiate the cluster:
 
@@ -38,7 +51,7 @@ Run `docker-compose` to instantiate the cluster:
 $ docker-compose up -d
 ```
 
-## Register the Cluster with SlurmDBD
+### Register the Cluster with SlurmDBD
 
 To register the cluster to the slurmdbd daemon, run the `register_cluster.sh`
 script:
@@ -54,7 +67,7 @@ $ ./register_cluster.sh
 > You can check the status of the cluster by viewing the logs: `docker-compose
 > logs -f`
 
-## Accessing the Cluster
+### Accessing the Cluster
 
 Use `docker exec` to run a bash shell on the controller container:
 
@@ -70,7 +83,7 @@ PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 normal*      up 5-00:00:00      2   idle c[1-2]
 ```
 
-## Submitting Jobs
+### Submitting Jobs
 
 The `slurm_jobdir` named volume is mounted on each Slurm container as `/data`.
 Therefore, in order to see job output files while on the controller, change to
@@ -84,7 +97,7 @@ Submitted batch job 2
 slurm-2.out
 ```
 
-## Stopping and Restarting the Cluster
+### Stopping and Restarting the Cluster
 
 ```console
 $ docker-compose stop
@@ -94,7 +107,7 @@ $ docker-compose stop
 $ docker-compose start
 ```
 
-## Deleting the Cluster
+### Deleting the Cluster
 
 To remove all containers and volumes, run:
 

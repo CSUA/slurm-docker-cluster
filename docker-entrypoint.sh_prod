@@ -1,7 +1,9 @@
 #!/bin/bash
+# ADD DOCUMENTATION HERE TODO
 export PATH="/usr/local/nvidia/bin:$PATH"
 export PATH="/usr/local/cuda:$PATH"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64
+export MYSQL_PASSWORD="$(cat mysql_password.txt)"
 set -e
 
 sed -e "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/" /etc/slurm/slurmdbd.conf > \

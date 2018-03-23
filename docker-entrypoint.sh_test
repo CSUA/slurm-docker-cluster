@@ -3,9 +3,8 @@
 export PATH="/usr/local/nvidia/bin:$PATH"
 export PATH="/usr/local/cuda:$PATH"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64
+export MYSQL_PASSWORD="$(cat mysql_password.txt)"
 set -e
-
-MYSQL_PASSWORD=`cat /root/mysql_password.txt`
 
 sed -e "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/" /etc/slurm/slurmdbd.conf > \
 /etc/slurm/slurmdbd_temp.conf
@@ -24,8 +23,6 @@ then
     gosu munge /usr/sbin/munged
 
     echo "---> Starting the Slurm Database Daemon (slurmdbd) ..."
-
-    echo What the fuck docker compose $MYSQL_PASSWORD !!!!
 
     until echo "SELECT 1" | mysql -h mysql_test -uslurm -p$MYSQL_PASSWORD 2>&1 > /dev/null
     do

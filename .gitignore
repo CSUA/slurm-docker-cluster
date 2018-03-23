@@ -1,4 +1,6 @@
 docker-entrypoint.sh
+docker-entrypoint.sh_prod
+docker-compose.yml_prod
 docker-compose.yml
 slurm.conf
 slurmdbd.conf

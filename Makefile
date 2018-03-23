@@ -1,5 +1,5 @@
 SYMLINKS := slurm.conf slurmdbd.conf docker-compose.yml docker-entrypoint.sh register_cluster.sh
-.PHONY = prod prod_symlinks test_symlinks test run debug clean
+.PHONY = prod prod_symlinks test_symlinks test run debug clean init password
 
 all:
 	echo "Please select a specific target"
@@ -36,11 +36,26 @@ prod_symlinks:
 	@echo "Building...may Richard Stallman have mercy on your soul"
 	$(foreach FILE,$(SYMLINKS), $(shell ln -sf $(FILE)_prod $(FILE)))
 
+password: prod_password test_password
+
 test_password:
-	pswd="$$(cat mysql_password.txt)" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml && rm -f test.txt && pswd=""
+	pswd="$$(cat mysql_password.txt)" && echo $$pswd; \
+	if test $$(grep MYSQL_PASSWORD docker-compose.yml_test | wc -l) = 0; then \
+	echo "got here" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_test > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml_test && rm -f test.txt; \
+	fi && pswd=""
 
 prod_password:
-	pswd="$$(cat mysql_password.txt)" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_prod > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml_prod && rm -f test.txt && pswd=""
+	pswd="$$(cat mysql_password.txt)" && echo $$pswd; \
+	if test $$(grep MYSQL_PASSWORD docker-compose.yml_prod | wc -l) = 0; then \
+	echo "got here" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_prod > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml_prod && rm -f test.txt; \
+	fi && pswd=""
+
+strip_password: strip_prod_password strip_test_password
+
+strip_prod_password:
+	sed -i --follow-symlinks -e '/MYSQL_PASSWORD:/d' docker-compose.yml_prod
+strip_test_password:
+	sed -i --follow-symlinks -e '/MYSQL_PASSWORD:/d' docker-compose.yml_test
 
 clean:
 	docker-compose rm -sf
@@ -49,3 +64,12 @@ clean:
 	@docker volume rm nihti_etc_munge nihti_etc_slurm nihti_slurm_jobdir nihti_var_lib_mysql nihti_var_log_slurm
 	@docker volume rm nihti_etc_munge_test nihti_etc_slurm_test nihti_slurm_jobdir_test nihti_var_lib_mysql_test nihti_var_log_slurm_test
 	$(foreach FILE,$(SYMLINKS), $(shell unlink $(FILE)))
+
+init: .git/hooks/pre-commit
+
+.git/hooks/pre-commit: .pre-commit.sh
+	cp .pre-commit.sh .git/hooks/pre-commit
+	chmod +x .git/hooks/pre-commit
+
+mysql_password.txt:
+	openssl rand -base64 32 > mysql_password.txt
