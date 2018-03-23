@@ -40,14 +40,14 @@ password: prod_password test_password
 
 test_password:
 	pswd="$$(cat mysql_password.txt)" && echo $$pswd; \
-	if test $$(grep MYSQL_PASSWORD docker-compose.yml_test | wc -l) = 0; then \
+	if test $$(grep MYSQL_PASSWORD: docker-compose.yml_test | wc -l) = 0; then \
 	echo "got here" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_test > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml_test && rm -f test.txt; \
 	fi && pswd=""
 
 prod_password:
 	pswd="$$(cat mysql_password.txt)" && echo $$pswd; \
-	if test $$(grep MYSQL_PASSWORD docker-compose.yml_prod | wc -l) = 0; then \
-	echo "got here" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_prod > test.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test.txt > docker-compose.yml_prod && rm -f test.txt; \
+	if test $$(grep MYSQL_PASSWORD: docker-compose.yml_prod | wc -l) = 0; then \
+	echo "got here" && sed -e '/MYSQL_RANDOM_ROOT_PASSWORD: "yes"/a \      MYSQL_PASSWORD: ' docker-compose.yml_prod > test2.txt && sed "/MYSQL_PASSWORD: / s/$$/$$pswd/" test2.txt > docker-compose.yml_prod && rm -f test2.txt; \
 	fi && pswd=""
 
 strip_password: strip_prod_password strip_test_password

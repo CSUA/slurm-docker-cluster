@@ -1,220 +1,243 @@
 version: "2.2"
 
 services:
-  mysql:
+  mysql_test:
     image: mysql:5.7
-    hostname: mysql
-    container_name: mysql
+    hostname: mysql_test
+    container_name: mysql_test
+    networks:
+      - slurmdockercluster_test
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_DATABASE: slurm_acct_db
       MYSQL_USER: slurm
     volumes:
-      - var_lib_mysql:/var/lib/mysql
+      - var_lib_mysql_test:/var/lib/mysql
 
-  slurmdbd:
-    image: slurm-docker-cluster-ubuntu
+  slurmdbd_test:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmdbd"]
-    container_name: slurmdbd
-    hostname: slurmdbd
+    container_name: slurmdbd_test
+    hostname: slurmdbd_test
+    networks:
+      - slurmdockercluster_test
     volumes:
-      - etc_munge:/etc/munge
-      - etc_slurm:/etc/slurm
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test:/etc/munge
+      # - etc_slurm_test:/etc/slurm
+      - var_log_slurm_test:/var/log/slurm
     expose:
       - "6819"
     depends_on:
-      - mysql
+      - mysql_test
 
-  slurmctld:
-    image: slurm-docker-cluster-ubuntu
+  slurmctld_test:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmctld"]
-    container_name: slurmctld
-    hostname: slurmctld
+    container_name: slurmctld_test
+    hostname: slurmctld_test
     cpuset: "0,1,2,3"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia1
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6817"
     ports:
-      - "22:22/tcp"
+      - "22222:22/tcp"
     depends_on:
-      - "slurmdbd"
+      - "slurmdbd_test"
 
-  c1:
-    image: slurm-docker-cluster-ubuntu
+  c_test1:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c1
-    container_name: c1
+    hostname: c_test1
+    container_name: c_test1
     cpuset: "4,5,6,7"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia0
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
 
-  c2:
-    image: slurm-docker-cluster-ubuntu
+  c_test2:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c2
-    container_name: c2
+    hostname: c_test2
+    container_name: c_test2
     cpuset: "8,9,10,11"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia2
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
 
-  c3:
-    image: slurm-docker-cluster-ubuntu
+  c_test3:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c3
-    container_name: c3
+    hostname: c_test3
+    container_name: c_test3
     cpuset: "12,13,14,15"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia3
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
 
-  c4:
-    image: slurm-docker-cluster-ubuntu
+  c_test4:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c4
-    container_name: c4
+    hostname: c_test4
+    container_name: c_test4
     cpuset: "16,17,18,19"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia4
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
 
-  c5:
-    image: slurm-docker-cluster-ubuntu
+  c_test5:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c5
-    container_name: c5
+    hostname: c_test5
+    container_name: c_test5
     cpuset: "20,21,22,23"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia5
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
 
-  c6:
-    image: slurm-docker-cluster-ubuntu
+  c_test6:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c6
-    container_name: c6
+    hostname: c_test6
+    container_name: c_test6
     cpuset: "24,25,26,27"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia6
     volumes:
-      - etc_munge:/etc/munge
-        #- etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #- etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
 
-  c7:
-    image: slurm-docker-cluster-ubuntu
+  c_test7:
+    image: slurm-docker-cluster-ubuntu_test
     command: ["slurmd"]
-    hostname: c7
-    container_name: c7
+    hostname: c_test7
+    container_name: c_test7
     cpuset: "28,29,30,31"
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster_test
     devices:
       - /dev/nvidia7
     volumes:
-      - etc_munge:/etc/munge
-        #      - etc_slurm:/etc/slurm
-      - slurm_jobdir:/data
-      - var_log_slurm:/var/log/slurm
+      - etc_munge_test/etc/munge
+        #      - etc_slurm_test/etc/slurm
+      - slurm_jobdir_test/data
+      - var_log_slurm_test/var/log/slurm
       - /home:/home
       - /datasets:/datasets
     expose:
       - "6818"
     depends_on:
-      - "slurmctld"
+      - "slurmctld_test"
+
+networks:
+  slurmdockercluster_test:
 
 volumes:
-  etc_munge:
-  etc_slurm:
-  slurm_jobdir:
-  var_lib_mysql:
-  var_log_slurm:
+  etc_munge_test:
+  etc_slurm_test:
+  slurm_jobdir_test:
+  var_lib_mysql_test:
+  var_log_slurm_test:
