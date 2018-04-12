@@ -43,6 +43,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6817"
@@ -68,6 +69,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
@@ -91,6 +93,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
@@ -114,6 +117,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
@@ -137,6 +141,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
@@ -160,6 +165,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
@@ -183,6 +189,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
@@ -206,6 +213,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
       - /home:/sodahome
+      - /slurmhome:/home
       - /datasets:/datasets
     expose:
       - "6818"
