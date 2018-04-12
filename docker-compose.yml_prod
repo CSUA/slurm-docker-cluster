@@ -42,7 +42,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6817"
@@ -67,7 +67,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
@@ -90,7 +90,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
@@ -113,7 +113,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
@@ -136,7 +136,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
@@ -159,7 +159,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
@@ -182,7 +182,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
@@ -205,7 +205,7 @@ services:
         #      - etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
-      - /home:/home
+      - /home:/sodahome
       - /datasets:/datasets
     expose:
       - "6818"
