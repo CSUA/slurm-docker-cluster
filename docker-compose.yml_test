@@ -48,6 +48,7 @@ services:
         #- etc_slurm_test/etc/slurm
       - slurm_jobdir_test/data
       - var_log_slurm_test/var/log/slurm
+      - etc_sshd_test/etc/ssh
       - /home:/sodahome
       - /slurmhome:/home
       - /datasets:/datasets
@@ -249,3 +250,4 @@ volumes:
   slurm_jobdir_test:
   var_lib_mysql_test:
   var_log_slurm_test:
+  etc_sshd_test:

@@ -5,6 +5,8 @@ services:
     image: mysql:5.7
     hostname: mysql
     container_name: mysql
+    networks:
+      - slurmdockercluster
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_DATABASE: slurm_acct_db
@@ -17,6 +19,8 @@ services:
     command: ["slurmdbd"]
     container_name: slurmdbd
     hostname: slurmdbd
+    networks:
+      - slurmdockercluster
     volumes:
       - etc_munge:/etc/munge
       # - etc_slurm:/etc/slurm
@@ -35,6 +39,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia1
     volumes:
@@ -42,6 +48,7 @@ services:
         #- etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
+      - etc_sshd/etc/ssh
       - /home:/sodahome
       - /slurmhome:/home
       - /datasets:/datasets
@@ -61,6 +68,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia0
     volumes:
@@ -85,6 +94,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia2
     volumes:
@@ -109,6 +120,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia3
     volumes:
@@ -133,6 +146,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia4
     volumes:
@@ -157,6 +172,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia5
     volumes:
@@ -181,6 +198,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia6
     volumes:
@@ -205,6 +224,8 @@ services:
     mem_limit: 16g
     memswap_limit: 17g
     mem_reservation: 512m
+    networks:
+      - slurmdockercluster
     devices:
       - /dev/nvidia7
     volumes:
@@ -220,9 +241,13 @@ services:
     depends_on:
       - "slurmctld"
 
+networks:
+  slurmdockercluster
+
 volumes:
   etc_munge:
   etc_slurm:
   slurm_jobdir:
   var_lib_mysql:
   var_log_slurm:
+  etc_sshd:
