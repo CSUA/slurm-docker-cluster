@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:17.10
 
 LABEL org.label-schema.vcs-url="https://github.com/giovtorres/slurm-docker-cluster" \
       org.label-schema.docker.cmd="docker-compose up -d" \
@@ -6,8 +6,8 @@ LABEL org.label-schema.vcs-url="https://github.com/giovtorres/slurm-docker-clust
       org.label-schema.description="Slurm Docker cluster on CentOS 7" \
       maintainer="Giovanni Torres"
 
-ARG SLURM_VERSION=17.02.9
-ARG SLURM_DOWNLOAD_MD5=6bd0b38e6bf08f3426a7dd1e663a2e3c
+ARG SLURM_VERSION=17.11.5
+ARG SLURM_DOWNLOAD_MD5=21fbe051aee43689dcd7711e47064f89
 ARG SLURM_DOWNLOAD_URL=https://download.schedmd.com/slurm/slurm-"$SLURM_VERSION".tar.bz2
 
 ARG GOSU_VERSION=1.10
@@ -42,7 +42,7 @@ RUN apt-get update \
 	   nscd \
 	   openssh-server \
 	   distcc \
-    && apt clean \
+    && apt-get clean \
     && rm -rf /var/cache/apt
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y -q install nslcd
 
@@ -103,6 +103,7 @@ RUN set -x \
     && chown munge: /var/run/munge
 
 # Install Nvidia CUDA
+RUN apt-get update && apt-get install -y dirmngr
 RUN wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.1.85-1_amd64.deb \
     && dpkg -i cuda-repo-ubuntu1604_9.1.85-1_amd64.deb \
     && apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
@@ -113,7 +114,7 @@ RUN apt-get -y update \
 
 # Install Pytorch + tensorflow
 RUN apt-get -y install cuda-command-line-tools-9.1 python3-dev python-dev python3-virtualenv python-virtualenv
-RUN pip3 install http://download.pytorch.org/whl/cu91/torch-0.3.1-cp35-cp35m-linux_x86_64.whl \
+RUN pip3 install http://download.pytorch.org/whl/cu91/torch-0.3.1-cp36-cp36m-linux_x86_64.whl \
     && pip3 install torchvision && pip install torchvision
 RUN pip3 install numpy \
     && pip install numpy
@@ -130,7 +131,17 @@ COPY sshd_config	/etc/ssh/sshd_config
 COPY pam.d		/etc/pam.d
 COPY mysql_password.txt /root/mysql_password.txt
 
+# init system
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64
+RUN chmod +x /usr/local/bin/dumb-init
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--", "/usr/local/bin/docker-entrypoint.sh"]
+#CMD ["bash", "-c", "/usr/local/bin/docker-entrypoint.sh slurmdbd"]
 CMD ["slurmdbd"]
+
+#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+# add new packages here
+RUN apt-get update && apt-get -y install curl golang-go cargo rustc tmux \
+            zsh tcsh sl lolcat cowsay neovim python3-neovim
+RUN chown -R 106:106 /etc/munge/
