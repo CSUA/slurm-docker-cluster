@@ -88,8 +88,8 @@ AccountingStorageLoc=slurm_acct_db
 #AccountingStorageUser=
 #
 # COMPUTE NODES
-NodeName=c[1-7] CPUs=4 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 RealMemory=16000 State=UNKNOWN Feature="P100" Gres=gpu:1
+NodeName=c[1-14] CPUs=4 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 RealMemory=16000 State=UNKNOWN Feature="P100" Gres=gpu:1
 GresTypes=gpu
 #
 # PARTITIONS
-PartitionName=normal Default=yes Nodes=c[1-7] Priority=50 DefMemPerCPU=500 Shared=NO MaxNodes=1 MaxTime=5-00:00:00 DefaultTime=5-00:00:00 State=UP
+PartitionName=normal Default=yes Nodes=c[1-14] Priority=50 DefMemPerCPU=500 Shared=NO MaxNodes=1 MaxTime=5-00:00:00 DefaultTime=5-00:00:00 State=UP

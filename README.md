@@ -46,27 +46,43 @@ If you have any questions, please email [latte@csua.berkeley.edu][3].
 
 ## Developer Guide
 
-TODO
+This repo contains the configurations used to test and deploy the slurm docker cluster known as `latte`. The important commands can be found in the contents of `Makefile`.
 
-## Slurm Docker Cluster
+The cluster is created using `docker-compose`, specifically using `nvidia-docker-compose`. There are a number of other pieces of software involved, however.
+
+### How docker-compose works
+
+(Copied from <https://docs.docker.com/compose/overview/> )
+
+Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
+
+Using Compose is basically a three-step process:
+
+1. Define your app’s environment with a `Dockerfile` so it can be reproduced anywhere.
+
+2. Define the services that make up your app in `docker-compose.yml` so they can be run together in an isolated environment.
+
+3. Run `docker-compose up` and Compose starts and runs your entire app.
+
+### About the Makefile
+
+The `Makefile` describes all the necessary commands for building and testing the cluster.
+
+## Slurm Docker Cluster (Documentation from original Repo)
 
 This is a multi-container Slurm cluster using docker-compose.  The compose file
 creates named volumes for persistent storage of MySQL data files as well as
 Slurm state and log directories.
 
-### Makefile commands
-
-* TODO
-
 ### Containers and Volumes
 
 The compose file will run the following containers:
 
-* mysql
-* slurmdbd
-* slurmctld
-* c1 (slurmd)
-* c2 (slurmd)
+* `mysql`
+* `slurmdbd`
+* `slurmctld`
+* `c1 (slurmd)`
+* `c2 (slurmd)`
 
 The compose file will create the following named volumes:
 

@@ -120,6 +120,8 @@ RUN pip3 install numpy \
     && pip install numpy
 RUN pip3 install tensorflow tensorflow-gpu \
     && pip install tensorflow tensorflow-gpu
+RUN pip3 install sklearn scipy pandas \
+    && pip install sklearn scipy pandas
 # End Pytorch + tensorflow
 
 COPY slurm.conf		/etc/slurm/slurm.conf

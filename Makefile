@@ -11,13 +11,13 @@ prod: prod_symlinks
 	docker build -t slurm-docker-cluster-ubuntu .
 
 run:
-	nvidia-docker-compose down
-	nvidia-docker-compose up -d
-	./register_cluster.sh
+	nvidia-docker-compose -p latte down
+	nvidia-docker-compose -p latte up -d
+	@- ./register_cluster.sh
 
 debug:
-	nvidia-docker-compose down
-	nvidia-docker-compose up
+	nvidia-docker-compose -p latte down
+	nvidia-docker-compose -p latte up
 
 test_symlinks:
 	$(foreach FILE,$(SYMLINKS), $(shell ln -sf $(FILE)_test $(FILE)))
